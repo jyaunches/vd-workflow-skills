@@ -24,6 +24,7 @@ cp -r vd-*/ ~/.pi/agent/skills/
 ### Specification & Review
 | Skill | Description |
 |-------|-------------|
+| `vd-spec` | Create new specification files following VD workflow standards |
 | `vd-spec-review-architecture` | Review specs for architectural concerns and design gaps |
 | `vd-spec-review-design` | Review specs for Pythonic patterns, simplification, reuse |
 | `vd-spec-review-implementation` | Review specs for implementation clarity and test coverage |
