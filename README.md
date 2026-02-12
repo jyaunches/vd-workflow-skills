@@ -4,19 +4,23 @@ A collection of [pi coding agent](https://github.com/badlogic/pi-mono) skills fo
 
 ## Installation
 
-Clone this repo and symlink or copy the skill directories to your pi skills folder:
+Clone this repo and symlink or copy the skill directories and agents to your pi folders:
 
 ```bash
 git clone https://github.com/jyaunches/vd-workflow-skills.git
 cd vd-workflow-skills
 
-# Option 1: Symlink all skills
+# Option 1: Symlink all skills and agents
 for skill in vd-*/; do
   ln -sf "$(pwd)/$skill" ~/.pi/agent/skills/
 done
+for agent in agents/*.md; do
+  ln -sf "$(pwd)/$agent" ~/.pi/agent/agents/
+done
 
-# Option 2: Copy all skills
+# Option 2: Copy all skills and agents
 cp -r vd-*/ ~/.pi/agent/skills/
+cp agents/*.md ~/.pi/agent/agents/
 ```
 
 ## Skills Overview
@@ -51,6 +55,16 @@ cp -r vd-*/ ~/.pi/agent/skills/
 | Skill | Description |
 |-------|-------------|
 | `vd-git-session-cleanup` | Clean up temporary files created during dev sessions |
+
+## Agents
+
+The workflow includes subagents that orchestrate complex multi-skill workflows:
+
+| Agent | Description |
+|-------|-------------|
+| `feature-writer` | Implements feature phases from reviewed specs using TDD, looping until all phases complete |
+| `review-executor` | Orchestrates spec review - runs simplify, test spec, validation plan, design & impl reviews |
+| `validation-executor` | Executes BDD validation scenarios, using vd-bug for failures, looping until all pass |
 
 ## Usage
 
