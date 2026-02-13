@@ -77,6 +77,8 @@ specs/
     └── validation.md    # Validation plan (created by vd-validation-plan)
 ```
 
+**Note:** Validation planning is handled by the `vd-validation-plan` skill during the review phase of `/vd-execute-wf`, NOT during spec creation. This command only creates `spec.md`.
+
 ---
 
 **Creating detailed specification for**: $@

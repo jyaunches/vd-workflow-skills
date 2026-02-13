@@ -19,30 +19,35 @@ Receives a spec directory path: `<spec_dir>/`
 
 **Note:** Validation is handled separately by the `validation-executor` agent after all implementation phases complete. This agent focuses only on implementation phases.
 
+## ⚠️ CRITICAL: Phase Loop Execution
+
+You MUST loop through ALL phases until every phase has a `[COMPLETED:]` marker. Do NOT stop after one phase.
+
 ## Workflow
 
-Loop until all phases complete:
+**LOOP until all phases complete:**
 
-1. Find next incomplete phase:
-   ```bash
-   SPEC_FILE="$SPEC_DIR/spec.md"
-   grep -n "^## Phase" "$SPEC_FILE" | grep -v "\[COMPLETED:" | head -1
-   ```
+### Step 1: Find Next Incomplete Phase
+```bash
+SPEC_FILE="$SPEC_DIR/spec.md"
+grep -n "^## Phase" "$SPEC_FILE" | grep -v "\[COMPLETED:" | head -1
+```
 
-2. If an incomplete phase is found:
-   - Read and follow the vd-implement-phase skill instructions
-   - Use `--auto` mode for autonomous execution
-   - Verify phase now has `[COMPLETED: sha]` marker
-   - Continue loop
+### Step 2: If Incomplete Phase Found
+1. **Load the skill**: Read `~/.pi/agent/skills/vd-implement-phase/SKILL.md`
+2. **Execute the skill** for `<spec_dir> --auto`
+3. **Verify** the phase now has `[COMPLETED: sha]` marker in spec.md
+4. **GO BACK TO STEP 1** - Find the next incomplete phase
 
-3. If all phases complete:
-   - Read and follow the vd-check-work skill instructions
-   - Output completion summary
-   - Exit
+### Step 3: When All Phases Complete (No More Incomplete Phases)
+1. **Load the skill**: Read `~/.pi/agent/skills/vd-check-work/SKILL.md`
+2. **Execute the skill** for `<spec_dir>`
+3. **Output completion summary**
+4. **Exit**
 
 ## TDD Process for Each Phase
 
-Follow the 7-step pattern from vd-implement-phase:
+Each phase follows the 7-step pattern from vd-implement-phase:
 1. Phase Review & Alignment
 2. Write Tests First (red)
 3. Implement Code (green)

@@ -65,48 +65,80 @@ fi
 
 ### Step 3: Execute Review Phase
 
-Use the subagent tool to invoke the review-executor agent:
+Use the **subagent tool** to invoke the review-executor agent:
 
+**Subagent Tool Parameters:**
+- **agent**: `review-executor`
+- **task**: 
 ```
-Invoke subagent: review-executor
-Task: Execute review phase for spec directory: <spec_dir>
+Execute review phase for spec directory: <spec_dir>
 
-Run these steps in sequence:
-1. vd-spec-simplify <spec_dir> --auto-apply
-2. vd-spec-tests <spec_dir>
-3. vd-validation-plan <spec_dir>
-4. vd-validation-review <spec_dir>  ← PAUSES FOR USER APPROVAL
-5. vd-spec-review-design <spec_dir> --auto-apply
-6. vd-spec-review-implementation <spec_dir> --auto-apply
+Run ALL 6 steps in sequence by loading and following each skill:
+1. Load ~/.pi/agent/skills/vd-spec-simplify/SKILL.md - Execute for <spec_dir> --auto-apply
+2. Load ~/.pi/agent/skills/vd-spec-tests/SKILL.md - Execute for <spec_dir>
+3. Load ~/.pi/agent/skills/vd-validation-plan/SKILL.md - Execute for <spec_dir>
+4. Load ~/.pi/agent/skills/vd-validation-review/SKILL.md - Execute for <spec_dir> ← PAUSES FOR USER APPROVAL
+5. Load ~/.pi/agent/skills/vd-spec-review-design/SKILL.md - Execute for <spec_dir> --auto-apply
+6. Load ~/.pi/agent/skills/vd-spec-review-implementation/SKILL.md - Execute for <spec_dir> --auto-apply
+
+Internal paths:
+- spec.md at <spec_dir>/spec.md
+- tests.md at <spec_dir>/tests.md
+- validation.md at <spec_dir>/validation.md
 ```
+
+**Wait for review phase to complete before continuing.**
 
 ### Step 4: Execute Implementation Phase
 
-Use the subagent tool to invoke the feature-writer agent:
+Use the **subagent tool** to invoke the feature-writer agent:
 
+**Subagent Tool Parameters:**
+- **agent**: `feature-writer`
+- **task**:
 ```
-Invoke subagent: feature-writer
-Task: Implement feature from spec directory: <spec_dir>
+Implement feature from spec directory: <spec_dir>
 
-Process phases sequentially:
-1. Find phases without [COMPLETED:] markers
-2. Execute vd-implement-phase <spec_dir> --auto for each
-3. When all phases complete, run vd-check-work <spec_dir>
+LOOP through ALL phases until complete:
+1. Find phases without [COMPLETED:] markers: grep -n "^## Phase" "<spec_dir>/spec.md" | grep -v "\[COMPLETED:"
+2. For each incomplete phase:
+   - Load ~/.pi/agent/skills/vd-implement-phase/SKILL.md
+   - Execute for <spec_dir> --auto
+   - Verify [COMPLETED: sha] marker added
+   - LOOP BACK to step 1
+3. When NO incomplete phases remain:
+   - Load ~/.pi/agent/skills/vd-check-work/SKILL.md
+   - Execute for <spec_dir>
+   - Output completion summary
+
+Internal paths:
+- Spec: <spec_dir>/spec.md
+- Test spec: <spec_dir>/tests.md
 ```
+
+**Wait for implementation phase to complete before continuing.**
 
 ### Step 5: Execute Validation Phase
 
-Use the subagent tool to invoke the validation-executor agent:
+Use the **subagent tool** to invoke the validation-executor agent:
 
+**Subagent Tool Parameters:**
+- **agent**: `validation-executor`
+- **task**:
 ```
-Invoke subagent: validation-executor
-Task: Execute validation for spec directory: <spec_dir>
+Execute validation for spec directory: <spec_dir>
 
-Loop through scenarios:
+Validation plan: <spec_dir>/validation.md
+
+LOOP through each scenario:
 1. Parse BDD scenarios from validation.md
-2. Execute each scenario
-3. On failure: use vd-bug --auto (up to 3 attempts)
-4. On pass: add [VALIDATED: sha] marker
+2. Execute each scenario using specified tools
+3. On failure: Load ~/.pi/agent/skills/vd-bug/SKILL.md and execute with --auto (up to 3 attempts)
+4. On pass: add [VALIDATED: sha] marker to scenario header
+5. Update summary table
+6. Continue until all scenarios pass or max attempts reached
+
+Return final validation report.
 ```
 
 ## State Tracking

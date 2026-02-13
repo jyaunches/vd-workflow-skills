@@ -105,7 +105,10 @@ pytest tests/ -v --tb=short
 
 ## Failure Handling with vd-bug Skill
 
-When a scenario fails, follow the vd-bug skill with context:
+When a scenario fails:
+
+1. **Load the skill**: Read `~/.pi/agent/skills/vd-bug/SKILL.md`
+2. **Execute with context**:
 
 ```
 Fix validation failure in scenario X.Y: <scenario name>
@@ -120,7 +123,7 @@ FAILURE CONTEXT:
 The validation scenario should pass after this fix.
 ```
 
-Use `--auto` flag for autonomous bug fixing.
+3. Use `--auto` flag for autonomous bug fixing
 
 ## Status Markers
 

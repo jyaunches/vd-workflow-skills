@@ -18,36 +18,45 @@ Receives a spec directory path: `<spec_dir>/`
 - Test spec file: `<spec_dir>/tests.md`
 - Validation plan: `<spec_dir>/validation.md`
 
+## ⚠️ CRITICAL: Execute ALL 6 Steps in Sequence
+
+You MUST execute all 6 steps in order. Do NOT skip any steps.
+
 ## Workflow
 
 1. Record starting commit: `git rev-parse HEAD`
-2. Run each review step in order by following the corresponding skill instructions:
+2. Execute each step by **loading the skill file and following its instructions**:
 
 ### Step 1: Spec Simplify
-Read and follow the instructions in the vd-spec-simplify skill.
-Apply YAGNI review, remove unnecessary complexity.
-Use `--auto-apply` mode.
+1. **Load skill**: Read `~/.pi/agent/skills/vd-spec-simplify/SKILL.md`
+2. **Execute skill** for `<spec_dir> --auto-apply`
+3. Apply YAGNI review, remove unnecessary complexity
 
 ### Step 2: Spec Tests
-Read and follow the instructions in the vd-spec-tests skill.
-Generate test specifications in `<spec_dir>/tests.md`.
+1. **Load skill**: Read `~/.pi/agent/skills/vd-spec-tests/SKILL.md`
+2. **Execute skill** for `<spec_dir>`
+3. Generate test specifications in `<spec_dir>/tests.md`
 
 ### Step 3: Validation Plan
-Read and follow the instructions in the vd-validation-plan skill.
-Generate BDD scenarios in `<spec_dir>/validation.md`.
+1. **Load skill**: Read `~/.pi/agent/skills/vd-validation-plan/SKILL.md`
+2. **Execute skill** for `<spec_dir>`
+3. Generate BDD scenarios in `<spec_dir>/validation.md`
 
 ### Step 4: Validation Review
-Read and follow the instructions in the vd-validation-review skill.
-**PAUSE FOR USER APPROVAL** of the validation plan.
-This is the only step that requires user interaction.
+1. **Load skill**: Read `~/.pi/agent/skills/vd-validation-review/SKILL.md`
+2. **Execute skill** for `<spec_dir>`
+3. **PAUSE FOR USER APPROVAL** of the validation plan
+4. This is the only step that requires user interaction
 
 ### Step 5: Design Review
-Read and follow the instructions in the vd-spec-review-design skill.
-Use `--auto-apply` mode for safe recommendations.
+1. **Load skill**: Read `~/.pi/agent/skills/vd-spec-review-design/SKILL.md`
+2. **Execute skill** for `<spec_dir> --auto-apply`
+3. Use `--auto-apply` mode for safe recommendations
 
 ### Step 6: Implementation Review
-Read and follow the instructions in the vd-spec-review-implementation skill.
-Use `--auto-apply` mode for safe recommendations.
+1. **Load skill**: Read `~/.pi/agent/skills/vd-spec-review-implementation/SKILL.md`
+2. **Execute skill** for `<spec_dir> --auto-apply`
+3. Use `--auto-apply` mode for safe recommendations
 
 ## Auto-Apply Logic
 
